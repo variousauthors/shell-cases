@@ -6,85 +6,125 @@ homepage www.puzzlescript.net
 OBJECTS
 ========
 
+FrameRider
+black red white
+11111
+10001
+10201
+10001
+11111
+
+Frame
+grey red
+11111
+1...1
+1...1
+1...1
+11111
+
+Wall
+gray lightblue
+00000
+00000
+00000
+00000
+11111
+
+Raised
+gray lightblue
+00000
+00000
+00000
+00000
+11111
+
+Lowered
+gray white
+11111
+00000
+00000
+00000
+00000
+
 Floor
 white gray
-10001
 00000
-00100
 00000
-10001
+00000
+00000
+00000
 
 5
 white black
-00000
-01110
-01010
-01110
-00000
+.....
+.111.
+.101.
+.111.
+.....
 
 8
 white black
-01110
-01010
-01110
-00000
-00000
+.111.
+.101.
+.111.
+.....
+.....
 
 4
 white black
-00000
-11100
-10100
-11100
-00000
+.....
+111..
+101..
+111..
+.....
 
 6
 white black
-00000
-00111
-00101
-00111
-00000
+.....
+..111
+..101
+..111
+.....
 
 2
 white black
-00000
-00000
-01110
-01010
-01110
+.....
+.....
+.111.
+.101.
+.111.
 
 7
 white black
-11100
-10100
-11100
-00000
-00000
+111..
+101..
+111..
+.....
+.....
 
 9
 white black
-00111
-00101
-00111
-00000
-00000
+..111
+..101
+..111
+.....
+.....
 
 3
 white black
-00000
-00000
-00111
-00101
-00111
+.....
+.....
+..111
+..101
+..111
 
 1
 white black
-00000
-00000
-11100
-10100
-11100
+.....
+.....
+111..
+101..
+111..
 
 Player
 white
@@ -101,6 +141,16 @@ p = Player
 Background = Floor
 . = Floor
 
+# = Wall
+@ = Raised
+_ = lowered
+
+F = Frame
+
+Rider = 5
+Mover = 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9
+Barrier = wall or raised
+
 =======
 SOUNDS
 =======
@@ -109,12 +159,15 @@ SOUNDS
 COLLISIONLAYERS
 ================
 
-Floor
+Floor, Lowered
+Wall, Raised, Frame, FrameRider
 Player, 5, 4, 6, 8, 2, 7, 9, 3, 1
 
 ======
 RULES
 ======
+
+[> player] [ FrameRider ] -> [ player ] [> FrameRider]
 
 [> Player] [5] -> [Player] [> 5]
 [> Player] [8] -> [Player] [> 8]
@@ -126,19 +179,19 @@ RULES
 [> Player] [1] -> [Player] [> 1]
 [> Player] [3] -> [Player] [> 3]
 
-( move from center )
+( center to edges )
 UP    [> 5] -> [8]
 DOWN  [> 5] -> [2]
 LEFT  [> 5] -> [4]
 RIGHT [> 5] -> [6]
 
-( back to center ) 
+( edges to center ) 
 DOWN  [> 8] -> [5]
 UP    [> 2] -> [5]
 LEFT  [> 6] -> [5]
 RIGHT [> 4] -> [5]
 
-( move into corners )
+( center to corners )
 LEFT  [> 8] -> [7]
 RIGHT [> 8] -> [9]
 
@@ -151,7 +204,7 @@ DOWN  [> 4] -> [1]
 UP    [> 6] -> [9]
 DOWN  [> 6] -> [3]
 
-( move out of corners )
+( corners to center )
 LEFT  [> 9] -> [8]
 RIGHT [> 7] -> [8]
 
@@ -164,13 +217,36 @@ DOWN  [> 7] -> [4]
 UP    [> 3] -> [6]
 DOWN  [> 9] -> [6]
 
-(exit -- horizontal)
-DOWN  [> 2|] -> [|8]
-UP    [> 8|] -> [|2]
-LEFT  [> 4|] -> [|6]
-RIGHT [> 6|] -> [|4]
 
-(exit -- corners ... 8 cases)
+[> Mover | Barrier ] -> [ Mover | Barrier ]
+
+(exit from edges )
+DOWN  [> 2| no wall ] -> [|8 ]
+UP    [> 8| no wall ] -> [|2 ]
+LEFT  [> 4| no wall ] -> [|6 ]
+RIGHT [> 6| no wall ] -> [|4 ]
+
+(exit from corners )
+UP    [> 7| no wall ] -> [|1]
+LEFT  [> 7| no wall ] -> [|9]
+
+UP    [> 9| no wall ] -> [|3]
+RIGHT [> 9| no wall ] -> [|7]
+
+DOWN  [> 3| no wall ] -> [|9]
+RIGHT [> 3| no wall ] -> [|1]
+
+DOWN  [> 1| no wall ] -> [|7]
+LEFT  [> 1| no wall ] -> [|3]
+
+( mounting and dismounting )
+[action player] [rider frame]  -> [player] [ action frameRider ]
+[action player] [frameRider ]  -> [player] [ action rider frame ] (this stopped working...)
+
+( upon mounting or dismounting, barriers change )
+[ action frameRider ] [ raised ] -> [action frameRider] [ lowered ]
+[ action rider ] [ lowered ] -> [action rider ] [ raised ]
+
 
 ==============
 WINCONDITIONS
