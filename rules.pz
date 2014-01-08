@@ -7,7 +7,7 @@ OBJECTS
 ========
 
 A_FrameRider
-black red white
+green red lightgreen
 11111
 10001
 10201
@@ -70,77 +70,85 @@ white gray
 00000
 00000
 
-5
-white black
+collected
+lightgreen green
 .....
 .111.
 .101.
 .111.
 .....
 
+5
+lightgreen green
+....1
+.11..
+1101.
+.1.1.
+...1.
+
 8
-white black
-.111.
+lightgreen green
 .101.
-.111.
+..11.
+.1.1.
 .....
 .....
 
 4
-white black
+lightgreen green
 .....
+1....
+01...
 111..
-101..
-111..
-.....
+1....
 
 6
-white black
+lightgreen green
 .....
-..111
-..101
-..111
-.....
+....1
+..110
+.1.11
+....1
 
 2
-white black
+lightgreen green
 .....
 .....
+..1..
 .111.
-.101.
-.111.
+1.011
 
 7
-white black
-111..
-101..
-111..
+lightgreen green
+011.1
+1.1..
+11...
 .....
 .....
 
 9
-white black
+lightgreen green
+.1.10
 ..111
-..101
-..111
-.....
+...11
+.1...
 .....
 
 3
-white black
+lightgreen green
 .....
 .....
-..111
-..101
-..111
+1..1.
+.1111
+..110
 
 1
-white black
+lightgreen green
 .....
-.....
+.1...
+1....
 111..
-101..
-111..
+0111.
 
 Player
 white
@@ -167,7 +175,8 @@ B = B_Frame
 Frame = A_Frame or B_Frame
 FrameRider = A_FrameRider or B_FrameRider
 
-Rider = 5
+c = collected
+Rider = collected
 Mover = 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9
 Barrier = wall or raised
 
@@ -181,13 +190,14 @@ COLLISIONLAYERS
 
 Floor, Lowered
 Wall, Raised, Frame, FrameRider
-Player, 5, 4, 6, 8, 2, 7, 9, 3, 1
+Player, 5, 4, 6, 8, 2, 7, 9, 3, 1, collected
 
 ======
 RULES
 ======
 
 [> player] [ FrameRider ] -> [ player ] [> FrameRider]
+[> player] [ collected ]  -> [ player ] [> collected ]
 
 [> Player] [5] -> [Player] [> 5]
 [> Player] [8] -> [Player] [> 8]
@@ -200,6 +210,11 @@ RULES
 [> Player] [3] -> [Player] [> 3]
 
 ( center to edges )
+UP    [> collected] -> [8]
+DOWN  [> collected] -> [2]
+LEFT  [> collected] -> [4]
+RIGHT [> collected] -> [6]
+
 UP    [> 5] -> [8]
 DOWN  [> 5] -> [2]
 LEFT  [> 5] -> [4]
@@ -210,6 +225,8 @@ DOWN  [> 8] -> [5]
 UP    [> 2] -> [5]
 LEFT  [> 6] -> [5]
 RIGHT [> 4] -> [5]
+
+late [5 frame] -> [ collected frame ]
 
 ( center to corners )
 LEFT  [> 8] -> [7]
@@ -263,8 +280,8 @@ LEFT  [> 1| no wall ] -> [|3]
 [action player] [ rider a_frame ]  -> [player] [ action a_frameRider ]
 [action player] [ rider b_frame ]  -> [player] [ action b_frameRider ]
 
-[action player] [ a_frameRider ]   -> [player] [ action rider a_frame ]
-[action player] [ b_frameRider ]   -> [player] [ action rider b_frame ]
+[action player] [ a_frameRider ]   -> [player] [ action collected a_frame ]
+[action player] [ b_frameRider ]   -> [player] [ action collected b_frame ]
 
 ( upon mounting or dismounting, barriers change )
 [ action frameRider ] [ raised ] -> [ frameRider] [ lowered ]
@@ -274,5 +291,4 @@ LEFT  [> 1| no wall ] -> [|3]
 ==============
 WINCONDITIONS
 ==============
-
 
