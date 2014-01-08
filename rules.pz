@@ -1,61 +1,163 @@
-title Simple Block Pushing Game
-author Stephen Lavelle
-homepage www.puzzlescript.net
+title SHELL CASE
+author arrogant.gamer
+homepage www.arrogantgamer.com
 
 ========
 OBJECTS
 ========
 
+( Floor Colour: #443333 )
+( Lowered Wall: #888888 )
+
+target
+#443333 yellow
+10001
+00000
+00000
+00000
+10001
+
+OpenCrate
+#222222 darkgrey green lightgreen
+10.01
+0...0
+.....
+0...0
+10.01
+
+Crate
+#222222 darkgrey green lightgreen
+10001
+02220
+02320
+02220
+10001
+
 A_FrameRider
-green red lightgreen
-11111
+green red lightgreen yellow darkred
+34113
 10001
-10201
+10204
 10001
-11111
+31143
 
 B_FrameRider
-black blue white
-11111
+green blue lightgreen yellow darkblue
+31413
 10001
 10201
-10001
-11111
+40001
+31113
 
 A_Frame
-grey red
-11111
+darkgrey red darkred
+02.10
 1...1
+.....
 1...1
-1...1
-11111
+01.20
 
 B_Frame
-grey red
-11111
+darkgrey blue darkblue
+01.10
 1...1
-1...1
-1...1
-11111
+.....
+2...1
+01.10
 
-Wall
-gray lightblue
-00000
-00000
-00000
-00000
-11111
+( EW -- east west )
+( NS -- east west )
 
-Raised
-gray lightblue
+EW_Wall
+grey darkgrey
 00000
 00000
 00000
 00000
 11111
 
-Lowered
-gray white
+NS_Wall
+grey darkgrey
+00000
+00000
+00000
+00000
+00000
+
+EW_Cracked_wall
+grey darkgrey
+00.00
+0...0
+..0..
+00..0
+.0.00
+
+NS_Cracked_wall
+grey darkgrey
+00.00
+...0.
+.0...
+0..00
+00.00
+
+A_Raised_EW
+gray darkgrey
+00000
+00000
+00000
+00000
+11111
+
+A_Lowered_EW
+#888888 #443333
+11111
+00000
+00000
+00000
+00000
+
+B_Raised_EW
+gray darkgrey
+00000
+00000
+00000
+00000
+11111
+
+B_Lowered_EW
+#888888 #443333
+11111
+00000
+00000
+00000
+00000
+
+A_Raised_NS
+gray
+00000
+00000
+00000
+00000
+00000
+
+A_Lowered_NS
+#888888 darkgrey
+11111
+00000
+00000
+00000
+00000
+
+B_Raised_NS
+gray
+00000
+00000
+00000
+00000
+00000
+
+B_Lowered_NS
+#888888 darkgrey
 11111
 00000
 00000
@@ -63,7 +165,7 @@ gray white
 00000
 
 Floor
-white gray
+#443333
 00000
 00000
 00000
@@ -82,7 +184,7 @@ lightgreen green
 lightgreen green
 ....1
 .11..
-1101.
+1001.
 .1.1.
 ...1.
 
@@ -99,7 +201,7 @@ lightgreen green
 .....
 1....
 01...
-111..
+011..
 1....
 
 6
@@ -107,7 +209,7 @@ lightgreen green
 .....
 ....1
 ..110
-.1.11
+.1.10
 ....1
 
 2
@@ -115,7 +217,7 @@ lightgreen green
 .....
 .....
 ..1..
-.111.
+.101.
 1.011
 
 7
@@ -129,7 +231,7 @@ lightgreen green
 9
 lightgreen green
 .1.10
-..111
+..110
 ...11
 .1...
 .....
@@ -139,7 +241,7 @@ lightgreen green
 .....
 .....
 1..1.
-.1111
+.1101
 ..110
 
 1
@@ -161,24 +263,55 @@ white
 LEGEND
 =======
 
-p = Player
+( basic stuff)
+p = Player and EW_wall
 Background = Floor
 . = Floor
+o = collected (the player starts here)
 
-# = Wall
-@ = Raised
-_ = lowered
+( horizontal walls )
+# = EW_Wall
+: = EW_Cracked_wall
+% = NS_Cracked_wall
 
-A = A_Frame
+- = A_Raised_EW
+_ = A_lowered_EW
+
+& = B_Raised_EW
+~ = B_lowered_EW
+
+( vertical walls )
+| = NS_Wall
+
+[ = A_Raised_NS
+] = A_lowered_NS
+
+{ = B_Raised_NS
+} = B_lowered_NS
+
+( frames )
+@ = A_Frame
 B = B_Frame
 
+( objects )
+c = crate
+
+( target )
+x = target
+
+( aggregates )
+Passage = NS_Cracked_wall or EW_Cracked_Wall
+Wall = NS_Wall or EW_Wall
 Frame = A_Frame or B_Frame
 FrameRider = A_FrameRider or B_FrameRider
-
-c = collected
 Rider = collected
 Mover = 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9
-Barrier = wall or raised
+A_Raised = A_raised_EW or A_raised_NS
+B_Raised = B_raised_EW or B_raised_NS
+A_lowered = A_lowered_EW or A_lowered_NS
+B_lowered = B_lowered_EW or B_lowered_NS
+Toggleable = A_raised or B_raised or A_lowered or B_lowered
+Barrier = wall or A_raised or B_raised or crate
 
 =======
 SOUNDS
@@ -188,15 +321,25 @@ SOUNDS
 COLLISIONLAYERS
 ================
 
-Floor, Lowered
-Wall, Raised, Frame, FrameRider
+Floor, A_Lowered_NS, B_Lowered_NS, A_Lowered_EW, B_Lowered_EW, target
 Player, 5, 4, 6, 8, 2, 7, 9, 3, 1, collected
+NS_Wall, EW_Wall, A_Raised_NS, B_Raised_NS, A_Raised_EW, B_Raised_EW, Frame, FrameRider, crate, opencrate
+NS_Cracked_wall, EW_Cracked_wall
 
 ======
 RULES
 ======
 
+( delayed win condition )
+
+[ action player ] [ openCrate ] -> [ player ] [ openCrate ] win
+[ > player ] [ openCrate ] -> [ player ] [ openCrate ] win
+
+( movement for frame riders )
 [> player] [ FrameRider ] -> [ player ] [> FrameRider]
+
+
+( movement of the goo )
 [> player] [ collected ]  -> [ player ] [> collected ]
 
 [> Player] [5] -> [Player] [> 5]
@@ -226,6 +369,7 @@ UP    [> 2] -> [5]
 LEFT  [> 6] -> [5]
 RIGHT [> 4] -> [5]
 
+( getting the goo into the frame feels goooood )
 late [5 frame] -> [ collected frame ]
 
 ( center to corners )
@@ -254,8 +398,9 @@ DOWN  [> 7] -> [4]
 UP    [> 3] -> [6]
 DOWN  [> 9] -> [6]
 
-
-[> Mover | Barrier ] -> [ Mover | Barrier ]
+( can't move through barriers d'uh )
+[> Mover      | Barrier ] -> [ Mover      | Barrier ]
+[> frameRider | Passage ] -> [ frameRider | Passage ]
 
 (exit from edges )
 DOWN  [> 2| no wall ] -> [|8 ]
@@ -283,10 +428,35 @@ LEFT  [> 1| no wall ] -> [|3]
 [action player] [ a_frameRider ]   -> [player] [ action collected a_frame ]
 [action player] [ b_frameRider ]   -> [player] [ action collected b_frame ]
 
-( upon mounting or dismounting, barriers change )
-[ action frameRider ] [ raised ] -> [ frameRider] [ lowered ]
-[ action rider ] [ lowered ] -> [ rider ] [ raised ]
+( upon mounting or dismounting, barriers toggle )
 
+( A_Frame rider )
+[ toggleable ] -> [ action toggleable ]
+
+[ action A_frameRider ] [ action A_raised_EW ] -> [ action A_frameRider] [ A_lowered_EW ]
+[ action A_frameRider ] [ action A_raised_NS ] -> [ action A_frameRider] [ A_lowered_NS ]
+[ action A_frameRider ] [ action A_lowered_EW no crate no frame ] -> [ action A_frameRider ] [ A_raised_EW ]
+[ action A_frameRider ] [ action A_lowered_NS no crate no frame ] -> [ action A_frameRider ] [ A_raised_NS ]
+
+[ action rider A_frame ] [ action A_raised_EW ] -> [ action rider A_frame ] [ A_lowered_EW ]
+[ action rider A_frame ] [ action A_raised_NS ] -> [ action rider A_frame] [ A_lowered_NS ]
+[ action rider A_frame ] [ action A_lowered_EW no crate no frame ] -> [ action rider A_frame ] [ A_raised_EW ]
+[ action rider A_frame ] [ action A_lowered_NS no crate no frame ] -> [ action rider A_frame ] [ A_raised_NS ]
+
+
+( B_Frame rider )
+[ action B_frameRider ] [ B_raised_EW ] -> [ action B_frameRider] [ B_lowered_EW ]
+[ action B_frameRider ] [ B_raised_NS ] -> [ action B_frameRider] [ B_lowered_NS ]
+
+[ action rider B_frame ] [ B_lowered_EW no crate no frame ] -> [ action rider B_frame ] [ B_raised_EW ]
+[ action rider B_frame ] [ B_lowered_NS no crate no frame ] -> [ action rider B_frame ] [ B_raised_NS ]
+
+( frames can push crates )
+[ > frameRider | crate ] -> [ > frameRider | > crate ]
+[ > frameRider | frame ] -> [ > frameRider | > frame ]
+
+( victory )
+late [ crate target ] -> [ opencrate 5 target ]
 
 ==============
 WINCONDITIONS
