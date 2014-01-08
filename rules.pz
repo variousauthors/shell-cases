@@ -6,7 +6,7 @@ homepage www.puzzlescript.net
 OBJECTS
 ========
 
-FrameRider
+A_FrameRider
 black red white
 11111
 10001
@@ -14,7 +14,23 @@ black red white
 10001
 11111
 
-Frame
+B_FrameRider
+black blue white
+11111
+10001
+10201
+10001
+11111
+
+A_Frame
+grey red
+11111
+1...1
+1...1
+1...1
+11111
+
+B_Frame
 grey red
 11111
 1...1
@@ -145,7 +161,11 @@ Background = Floor
 @ = Raised
 _ = lowered
 
-F = Frame
+A = A_Frame
+B = B_Frame
+
+Frame = A_Frame or B_Frame
+FrameRider = A_FrameRider or B_FrameRider
 
 Rider = 5
 Mover = 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9
@@ -240,15 +260,19 @@ DOWN  [> 1| no wall ] -> [|7]
 LEFT  [> 1| no wall ] -> [|3]
 
 ( mounting and dismounting )
-[action player] [rider frame]  -> [player] [ action frameRider ]
-[action player] [frameRider ]  -> [player] [ action rider frame ] (this stopped working...)
+[action player] [ rider a_frame ]  -> [player] [ action a_frameRider ]
+[action player] [ rider b_frame ]  -> [player] [ action b_frameRider ]
+
+[action player] [ a_frameRider ]   -> [player] [ action rider a_frame ]
+[action player] [ b_frameRider ]   -> [player] [ action rider b_frame ]
 
 ( upon mounting or dismounting, barriers change )
-[ action frameRider ] [ raised ] -> [action frameRider] [ lowered ]
-[ action rider ] [ lowered ] -> [action rider ] [ raised ]
+[ action frameRider ] [ raised ] -> [ frameRider] [ lowered ]
+[ action rider ] [ lowered ] -> [ rider ] [ raised ]
 
 
 ==============
 WINCONDITIONS
 ==============
+
 
