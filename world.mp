@@ -5,15 +5,6 @@ LEVELS
 message "A formless ooze cannot sokoban,
 message and a formless ooze are you."
 
-..c....x.
-.........
-##_####p#
-.........
-.........
-######_##
-...@.@.o.
-.........
-
 .........
 .#..@.._.
 .........
@@ -37,13 +28,3 @@ message and a formless ooze are you."
 ######&##
 ...B.@.o.
 .........
-
-
-
-
-
-
-
-
-
-
