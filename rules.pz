@@ -160,14 +160,17 @@ o = collected (the player starts here)
 . = WhiteTile
 
 ( frames )
-@ = A_Frame
+A = A_Frame
+@ = A_Frame and BlackTile
+
 B = B_Frame
+& = B_Frame and BlackTile
 
 ( aggregates )
 Frame = A_Frame or B_Frame
 FrameRider = Juxtapose or Sokoban
 Rider = collected
-Mover = 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9
+Mover = 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or FrameRider
 Barrier = BlackTile
 
 =======
@@ -178,9 +181,11 @@ SOUNDS
 COLLISIONLAYERS
 ================
 
+Player
 WhiteTile
-Player, 5, 4, 6, 8, 2, 7, 9, 3, 1, collected
-BlackTile, Frame, FrameRider
+5, 4, 6, 8, 2, 7, 9, 3, 1, collected
+BlackTile
+Frame, FrameRider
 
 ======
 RULES
@@ -275,10 +280,15 @@ LEFT  [> 1| no Barrier ] -> [|3]
 [action player] [ rider a_frame ]  -> [player] [ action juxtapose ]
 [action player] [ rider b_frame ]  -> [player] [ action Sokoban ]
 
-[action player] [ juxtapose ]   -> [player] [ action collected a_frame ]
-[action player] [ Sokoban ]   -> [player] [ action collected b_frame ]
+[action player] [ juxtapose ]   -> [player] [ action collected action a_frame ]
+[action player] [ Sokoban ]   -> [player] [ action collected action b_frame ]
 
-( upon mounting or dismounting, barriers toggle )
+( mount/dismount actions )
+[ action juxtapose ] [ WhiteTile ] -> [ action juxtapose ] [ action 5 ]
+[ action juxtapose ] [ BlackTile ] -> [ action juxtapose ] [ action 6 ]
+[ action juxtapose ] -> [ juxtapose ]
+[ action 5 ] -> [ BlackTile ]
+[ action 6 ] -> [ WhiteTile ]
 
 ( frames can push crates )
 [ > frameRider | frame ] -> [ > frameRider | > frame ]
@@ -286,3 +296,6 @@ LEFT  [> 1| no Barrier ] -> [|3]
 ==============
 WINCONDITIONS
 ==============
+
+
+
