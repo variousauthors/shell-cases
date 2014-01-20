@@ -9,6 +9,22 @@ OBJECTS
 ( Floor Colour: #443333 )
 ( Lowered Wall: #888888 )
 
+Crate
+grey
+.....
+..0..
+.000.
+..0..
+.....
+
+Target
+lightblue
+00000
+00.00
+0...0
+00.00
+00000
+
 Juxtapose
 green red lightgreen yellow darkred
 34113
@@ -45,7 +61,7 @@ darkgrey blue darkblue
 ( NS -- east west )
 
 WhiteTile
-white
+#EEEEEE
 00000
 00000
 00000
@@ -53,12 +69,12 @@ white
 00000
 
 BlackTile
-black
-00000
-00000
-00000
-00000
-00000
+#550044 #770066
+00001
+00110
+00001
+01100
+10001
 
 collected
 lightgreen green
@@ -166,10 +182,19 @@ A = A_Frame
 B = B_Frame
 & = B_Frame and BlackTile
 
-( aggregates )
+k = crate
+c = crate and BlackTile
+
+t = target
+x = target and BlackTile
+
+( useful aggregates )
++ = collected and A_frame and BlackTile
+
+( types )
 Frame = A_Frame or B_Frame
 FrameRider = Juxtapose or Sokoban
-Rider = collected
+ooze = 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or collected
 Mover = 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or Sokoban
 FluxMover = Juxtapose
 Barrier = BlackTile
@@ -178,16 +203,18 @@ Barrier = BlackTile
 SOUNDS
 =======
 
+sfx1 96691504
+
 ================
 COLLISIONLAYERS
 ================
 
-Player
 WhiteTile
-BlackTile
+target
 5, 4, 6, 8, 2, 7, 9, 3, 1
-collected
-Frame, FrameRider
+collected, player
+Frame, FrameRider, crate
+BlackTile
 
 ======
 RULES
@@ -256,11 +283,15 @@ DOWN  [> 7] -> [4]
 UP    [> 3] -> [6]
 DOWN  [> 9] -> [6]
 
-( Movers become trapped in flux )
+( Movers become can't move through or out of the flux )
 [> Mover | Barrier ] -> [ Mover | Barrier ]
+[> Mover Barrier ] -> [ Mover Barrier ]
 
-( FluxFrame can move out of flux )
-[> FluxMover Barrier | Barrier ] -> [ FluxMover Barrier | Barrier ]
+( FluxFrame can move into the flux or out of it, but can only move in flux )
+[> FluxMover Barrier | Barrier ] -> [ FluxMover Barrier | Barrier ] sfx1
+
+( movers can't move through crates )
+[> ooze | crate ] -> [ ooze | crate ]
 
 (exit from edges )
 DOWN  [> 2| no Barrier ] -> [|8 ]
@@ -282,8 +313,8 @@ DOWN  [> 1| no Barrier ] -> [|7]
 LEFT  [> 1| no Barrier ] -> [|3]
 
 ( mounting and dismounting )
-[action player] [ rider a_frame ]  -> [player] [ action juxtapose ]
-[action player] [ rider b_frame ]  -> [player] [ action Sokoban ]
+[action player] [ ooze a_frame ]  -> [player] [ action juxtapose ]
+[action player] [ ooze b_frame ]  -> [player] [ action Sokoban ]
 
 [action player] [ juxtapose ]   -> [player] [ action collected action a_frame ]
 [action player] [ Sokoban ]   -> [player] [ action collected action b_frame ]
@@ -306,10 +337,11 @@ LEFT  [> 1| no Barrier ] -> [|3]
 
 ( frames can push crates )
 [ > frameRider | frame ] -> [ > frameRider | > frame ]
+[ > frameRider | crate ] -> [ > frameRider | > crate ]
 
 ==============
 WINCONDITIONS
 ==============
 
-
+all crate on target
 
