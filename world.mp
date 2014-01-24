@@ -2,6 +2,14 @@
 LEVELS
 =======
 
+........p
+.........
+...kAo...
+.........
+.........
+.........
+.........
+
 
 #.###...#p
 .........#
@@ -18,9 +26,9 @@ LEVELS
 ##......
 ##.....x
 ###c..#p
-##.A....
+##.F....
 #&...o..
-##...A..
+##...F..
 
 ( cross the flux : )
 ( here each flux frame has access to just one vein )
@@ -30,4 +38,5 @@ LEVELS
 #&..o#.####k.
 ##.....##....
 
-
+message shouts:
+message @deanhuff for the air frame mechanic

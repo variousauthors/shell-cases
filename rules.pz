@@ -25,37 +25,54 @@ lightblue
 00.00
 00000
 
-Juxtapose
-green red lightgreen yellow darkred
-34113
-10001
-10204
-10001
-31143
+FluxFrame
+green lightgreen black
+2.2.2
+.000.
+20102
+.000.
+2.2.2
 
-Sokoban
-green blue lightgreen yellow darkblue
-31413
-10001
-10201
-40001
-31113
+EarthFrame (pusher)
+green lightgreen black
+.222.
+20002
+20102
+20002
+.222.
+
+
+AirFrame
+green lightgreen black
+.2.2.
+20002
+.010.
+20002
+.2.2.
+
+F_Frame
+darkgrey red darkred
+..2..
+.....
+2...2
+.....
+..2..
+
+E_Frame
+darkgrey blue darkblue
+.222.
+2...2
+2...2
+2...2
+.222.
 
 A_Frame
 darkgrey red darkred
-02.10
-1...1
+.2.2.
+2...2
 .....
-1...1
-01.20
-
-B_Frame
-darkgrey blue darkblue
-01.10
-1...1
-.....
-2...1
-01.10
+2...2
+.2.2.
 
 ( EW -- east west )
 ( NS -- east west )
@@ -176,11 +193,16 @@ o = collected (the player starts here)
 . = WhiteTile
 
 ( frames )
+F = F_Frame
+~ = F_Frame and BlackTile
+
+E = E_Frame
+& = E_Frame and BlackTile
+
 A = A_Frame
 @ = A_Frame and BlackTile
 
-B = B_Frame
-& = B_Frame and BlackTile
+( objects )
 
 k = crate
 c = crate and BlackTile
@@ -189,15 +211,16 @@ t = target
 x = target and BlackTile
 
 ( useful aggregates )
-+ = collected and A_frame and BlackTile
++ = collected and F_Frame and BlackTile
 
 ( types )
-Frame = A_Frame or B_Frame
-FrameRider = Juxtapose or Sokoban
+Frame = F_Frame or E_Frame or A_Frame
+FrameRider = FluxFrame or EarthFrame or AirFrame
 ooze = 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or collected
-Mover = 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or Sokoban
-FluxMover = Juxtapose
+FirmMover = 1 or 2 or 3 or 4 or 5 or 6 or 7 or 8 or 9 or EarthFrame or AirFrame
+FluxMover = FluxFrame
 Barrier = BlackTile
+object = crate or frame
 
 =======
 SOUNDS
@@ -283,14 +306,14 @@ DOWN  [> 7] -> [4]
 UP    [> 3] -> [6]
 DOWN  [> 9] -> [6]
 
-( Movers become can't move through or out of the flux )
-[> Mover | Barrier ] -> [ Mover | Barrier ]
-[> Mover Barrier ] -> [ Mover Barrier ]
+( FirmMovers can't move through or out of the flux )
+[> FirmMover | Barrier ] -> [ FirmMover | Barrier ]
+[> FirmMover Barrier ] -> [ FirmMover Barrier ]
 
-( FluxFrame can move into the flux or out of it, but can only move in flux )
+( FluxFrame can move into the flux or out of it, but can only move freely in the flux )
 [> FluxMover Barrier | Barrier ] -> [ FluxMover Barrier | Barrier ] sfx1
 
-( movers can't move through crates )
+( ooze can't push crates )
 [> ooze | crate ] -> [ ooze | crate ]
 
 (exit from edges )
@@ -313,31 +336,42 @@ DOWN  [> 1| no Barrier ] -> [|7]
 LEFT  [> 1| no Barrier ] -> [|3]
 
 ( mounting and dismounting )
-[action player] [ ooze a_frame ]  -> [player] [ action juxtapose ]
-[action player] [ ooze b_frame ]  -> [player] [ action Sokoban ]
+[action player] [ ooze F_Frame ]  -> [player] [ action FluxFrame  ]
+[action player] [ ooze E_Frame ]  -> [player] [ action EarthFrame ]
+[action player] [ ooze A_Frame ]  -> [player] [ action AirFrame   ]
 
-[action player] [ juxtapose ]   -> [player] [ action collected action a_frame ]
-[action player] [ Sokoban ]   -> [player] [ action collected action b_frame ]
+[action player] [ FluxFrame  ]    -> [player] [ action collected action F_Frame ]
+[action player] [ EarthFrame ]    -> [player] [ action collected action E_Frame ]
+[action player] [ AirFrame   ]    -> [player] [ action collected action A_Frame ]
 
 ( mount/dismount actions )
 
 ( upon mount or dismount juxtapose flips the flux )
-[ action juxtapose ] [ WhiteTile ] -> [ action juxtapose ] [ action 5 ]
-[ action juxtapose ] [ BlackTile ] -> [ action juxtapose ] [ action 6 ]
-[ action juxtapose ] -> [ juxtapose ]
 
-[ action collected action a_frame ] [ WhiteTile ] -> [ action collected action a_frame ] [ action 5 ]
-[ action collected action a_frame ] [ BlackTile ] -> [ action collected action a_frame ] [ action 6 ]
+( on mount, mark flux for flip ) 
+[ action FluxFrame ] [ WhiteTile ] -> [ action FluxFrame ] [ action 5 ]
+[ action FluxFrame ] [ BlackTile ] -> [ action FluxFrame ] [ action 6 ]
+[ action FluxFrame ] -> [ FluxFrame ]
+
+( on dismount, mark flux for flip ) 
+[ action collected action F_Frame ] [ WhiteTile ] -> [ action collected action F_Frame ] [ action 5 ]
+[ action collected action F_Frame ] [ BlackTile ] -> [ action collected action F_Frame ] [ action 6 ]
 
 [ action 5 ] -> [ BlackTile ]
 [ action 6 ] -> [ WhiteTile ]
 
-[ action collected action a_frame ] -> [ collected a_frame ]
-
+[ action collected action F_frame ] -> [ collected F_frame ]
 
 ( frames can push crates )
-[ > frameRider | frame ] -> [ > frameRider | > frame ]
-[ > frameRider | crate ] -> [ > frameRider | > crate ]
+
+( FluxFrame can push crates in the flux, or into/out of the flux )
+( EarthFrames can push crates while not in the flux )
+[ > FluxFrame  | object ]             -> [ > FluxFrame | > object ]
+[ > EarthFrame | > object | Barrier ] -> [ EarthFrame | object | Barrier ]
+
+( AirFrame move in mysterious ways )
+[ ^ AirFrame | object ] -> [ ^ AirFrame | < object ]
+[ v AirFrame | object ] -> [ v AirFrame | < object ]
 
 ==============
 WINCONDITIONS
