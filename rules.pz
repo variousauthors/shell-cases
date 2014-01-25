@@ -335,7 +335,9 @@ DOWN  [> 9] -> [6]
 [> FirmMover Barrier ] -> [ FirmMover Barrier ]
 
 ( FluxFrame can move into the flux or out of it, but can only move freely in the flux )
+( FluxFrame con only move into empty spaces outside the flux: it cannot push )
 [> FluxMover Barrier | Barrier ] -> [ FluxMover Barrier | Barrier ] sfx1
+[> FluxMover | object Barrier ] -> [ FluxMover | object Barrier ] sfx1
 
 ( ooze can't push crates )
 [> ooze | crate ] -> [ ooze | crate ]
@@ -388,7 +390,7 @@ LEFT  [> 1| no Barrier ] -> [|3]
 
 ( frames can push crates )
 
-( FluxFrameider can push crates in the flux, or into/out of the flux )
+( FluxFrameider can push crates in the flux )
 ( EarthFrames can push crates while not in the flux )
 [ > EarthFrame | object ]             -> [ > EarthFrame | > object ]
 [ > EarthFrame | > object | Barrier ] -> [ EarthFrame | object | Barrier ]
@@ -397,15 +399,14 @@ LEFT  [> 1| no Barrier ] -> [|3]
 [ > FluxFrame | > object | Barrier ] -> [ FluxFrame | object | Barrier ]
 
 ( AirFrame moves in mysterious ways )
-[ ^ AirFrame | object ] -> [ ^ AirFrame | < object ]
-[ v AirFrame | object ] -> [ v AirFrame | < object ]
-
+[ no object | ^ AirFrame | object ] -> [ no object | ^ AirFrame | < object ]
+[ no object | v AirFrame | object ] -> [ no object | v AirFrame | < object ]
 
 ( assume drain is open )
 [ ClosedDrain ] -> [ OpenDrain ]
 
 ( close it if any crates are not on their targets )
-late [ OpenDrain ] [ crate no target ] -> [ ClosedDrain ] [ crate no target ]
+late [ OpenDrain ] [ target no crate ] -> [ ClosedDrain ] [ target no crate ]
 
 ==============
 WINCONDITIONS

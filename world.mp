@@ -2,7 +2,45 @@
 LEVELS
 =======
 
+( TODO I want to use flickscreen: 
+  - need the player to follow the slime
+  - need to decide on a good screen size
+  - need to decide whether it adds anything to the game )
+
+message 5.
+( discover the FluxFrame, then extrude the EarthFrame )
+
+#####..###p
+###o..###]#
+#&#.A..cx.#
+###...#####
+###...#####
+####~..####
+#####..####
+
+message 4.
+( two stage puzzle )
+
+##############p
+#E.############
+#.*.*#o########
+##...#.#..#.]##
+#.*.x.A...*..##
+#E.#c.#########
+###############
+
 message 2. A tool using ooze.
+( crates on targets unlock drains )
+
+...###.p
+########
+#A.c.d.#
+#o.*..##
+#######.
+........
+
+message 3.
+( this is challenging: use air and earth in tight concert )
 
 ...###.p
 ####E###
@@ -12,6 +50,7 @@ message 2. A tool using ooze.
 ........
 
 message 1. You. A formless ooze.
+( an ooze can't SOKOBAN )
 
 ####p
 #.D.#
@@ -19,17 +58,7 @@ message 1. You. A formless ooze.
 #.o.#
 #####
 
-
-
-
-........p
-.........
-...kAo...
-.........
-.........
-.........
-.........
-
+( discard pile )
 
 #.###...#p
 .........#
