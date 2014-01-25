@@ -390,11 +390,16 @@ LEFT  [> 1| no Barrier ] -> [|3]
 
 ( frames can push crates )
 
-( FluxFrameider can push crates in the flux )
-( EarthFrames can push crates while not in the flux )
+( EarthFrames can push crates, but it is sticky )
 [ > EarthFrame | object ]             -> [ > EarthFrame | > object ]
+[ < EarthFrame | object ]             -> [ < EarthFrame | < object ]
 [ > EarthFrame | > object | Barrier ] -> [ EarthFrame | object | Barrier ]
 
+( EarthFrame can move objects at a distance... this is in for a test )
+([ > EarthFrame | | object ]             -> [ > EarthFrame | | > object ]
+[ > EarthFrame | | > object | Barrier ] -> [ > EarthFrame | | object | Barrier ])
+
+( FluxFrame can push crates in the flux )
 [ > FluxFrame | object ]             -> [ > FluxFrame | > object ]
 [ > FluxFrame | > object | Barrier ] -> [ FluxFrame | object | Barrier ]
 

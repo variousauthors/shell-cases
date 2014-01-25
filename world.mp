@@ -7,16 +7,25 @@ LEVELS
   - need to decide on a good screen size
   - need to decide whether it adds anything to the game )
 
+
+
+#Eo.###p
+#...####
+##.#####
+#.c..cx#
+#..##.cA
+##.##..#
+...#####
+########
+
 message 5.
 ( discover the FluxFrame, then extrude the EarthFrame )
 
-#####..###p
-###o..###]#
-#&#.A..cx.#
-###...#####
-###...#####
-####~..####
-#####..####
+###.###..##p
+.&#.#o..##]#
+.@.##.A..cx#
+#####...####
+...###~..###
 
 message 4.
 ( two stage puzzle )
@@ -91,4 +100,26 @@ message shouts:
 message @deanhuff for the air frame mechanic
 
 
+message 6.
+
+####p###
+#.oE####
+#...####
+##x#####
+##.#####
+#.c.x..#
+#..##.A#
+##.k####
+##.#####
+#...####
+#...####
+
+( t-junction passable by AIR )
+######
+..cc..
+##cc##
+#...##
+#..###
+#.EoA#
+p#####
 
