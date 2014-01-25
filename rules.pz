@@ -10,23 +10,39 @@ OBJECTS
 ( Lowered Wall: #888888 )
 
 Crate
-grey
-.....
-..0..
-.000.
-..0..
-.....
+grey lightgrey
+10000
+0.0.0
+01001
+0.0.0
+00110
 
 Target
-lightblue
+green
+.....
+.0.0.
+.....
+.0.0.
+.....
+
+OpenDrain
+#EEEEEE black
 00000
-00.00
-0...0
-00.00
+10101
+10101
+10101
+00000
+
+ClosedDrain
+#EEEEEE lightgrey
+00000
+10101
+10101
+10101
 00000
 
 FluxFrame
-green lightgreen black
+green lightgreen #550044
 2.2.2
 .000.
 20102
@@ -34,7 +50,7 @@ green lightgreen black
 2.2.2
 
 EarthFrame (pusher)
-green lightgreen black
+green lightgreen darkbrown
 .222.
 20002
 20102
@@ -43,7 +59,7 @@ green lightgreen black
 
 
 AirFrame
-green lightgreen black
+green lightgreen blue
 .2.2.
 20002
 .010.
@@ -51,7 +67,7 @@ green lightgreen black
 .2.2.
 
 F_Frame
-darkgrey red darkred
+darkgrey white #770066
 ..2..
 .....
 2...2
@@ -59,7 +75,7 @@ darkgrey red darkred
 ..2..
 
 E_Frame
-darkgrey blue darkblue
+darkgrey white brown
 .222.
 2...2
 2...2
@@ -67,7 +83,7 @@ darkgrey blue darkblue
 .222.
 
 A_Frame
-darkgrey red darkred
+darkgrey white lightblue
 .2.2.
 2...2
 .....
@@ -204,11 +220,14 @@ A = A_Frame
 
 ( objects )
 
-k = crate
-c = crate and BlackTile
+c = crate
+k = crate and BlackTile
+* = crate and target
 
-t = target
-x = target and BlackTile
+D = OpenDrain
+] = ClosedDrain
+
+x = target
 
 ( useful aggregates )
 + = collected and F_Frame and BlackTile
@@ -222,6 +241,11 @@ FluxMover = FluxFrame
 Barrier = BlackTile
 object = crate or frame
 
+( conditions )
+
+goal = target or OpenDrain
+keys = ooze or crate
+
 =======
 SOUNDS
 =======
@@ -233,7 +257,7 @@ COLLISIONLAYERS
 ================
 
 WhiteTile
-target
+OpenDrain, ClosedDrain, target
 5, 4, 6, 8, 2, 7, 9, 3, 1
 collected, player
 Frame, FrameRider, crate
@@ -364,18 +388,28 @@ LEFT  [> 1| no Barrier ] -> [|3]
 
 ( frames can push crates )
 
-( FluxFrame can push crates in the flux, or into/out of the flux )
+( FluxFrameider can push crates in the flux, or into/out of the flux )
 ( EarthFrames can push crates while not in the flux )
-[ > FluxFrame  | object ]             -> [ > FluxFrame | > object ]
+[ > EarthFrame | object ]             -> [ > EarthFrame | > object ]
 [ > EarthFrame | > object | Barrier ] -> [ EarthFrame | object | Barrier ]
 
-( AirFrame move in mysterious ways )
+[ > FluxFrame | object ]             -> [ > FluxFrame | > object ]
+[ > FluxFrame | > object | Barrier ] -> [ FluxFrame | object | Barrier ]
+
+( AirFrame moves in mysterious ways )
 [ ^ AirFrame | object ] -> [ ^ AirFrame | < object ]
 [ v AirFrame | object ] -> [ v AirFrame | < object ]
+
+
+( assume drain is open )
+[ ClosedDrain ] -> [ OpenDrain ]
+
+( close it if any crates are not on their targets )
+late [ OpenDrain ] [ crate no target ] -> [ ClosedDrain ] [ crate no target ]
 
 ==============
 WINCONDITIONS
 ==============
 
-all crate on target
+some ooze on OpenDrain
 

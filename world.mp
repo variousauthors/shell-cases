@@ -2,6 +2,26 @@
 LEVELS
 =======
 
+message 2. A tool using ooze.
+
+...###.p
+####E###
+#A.#.d.#
+#o.*..##
+#######.
+........
+
+message 1. You. A formless ooze.
+
+####p
+#.D.#
+#.*.#
+#.o.#
+#####
+
+
+
+
 ........p
 .........
 ...kAo...
@@ -32,7 +52,7 @@ LEVELS
 
 ( cross the flux : )
 ( here each flux frame has access to just one vein )
-#x.....#p...t
+#x.....#p...d
 ##.....###...
 #c#A.####....
 #&..o#.####k.
@@ -40,3 +60,6 @@ LEVELS
 
 message shouts:
 message @deanhuff for the air frame mechanic
+
+
+
