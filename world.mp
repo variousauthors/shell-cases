@@ -8,37 +8,16 @@ LEVELS
   - need to decide whether it adds anything to the game )
 
 
+message 1.
+( an ooze can't SOKOBAN )
 
-#Eo.###p
-#...####
-##.#####
-#.c..cx#
-#..##.cA
-##.##..#
-...#####
-########
+####p
+#.D.#
+#.*.#
+#.o.#
+#####
 
-message 5.
-( discover the FluxFrame, then extrude the EarthFrame )
-
-###.###..##p
-.&#.#o..##]#
-.@.##.A..cx#
-#####...####
-...###~..###
-
-message 4.
-( two stage puzzle )
-
-##############p
-#E.############
-#.*.*#o########
-##...#.#..#.]##
-#.*.x.A...*..##
-#E.#c.#########
-###############
-
-message 2. A tool using ooze.
+message 2.
 ( crates on targets unlock drains )
 
 ...###.p
@@ -58,68 +37,40 @@ message 3.
 #######.
 ........
 
-message 1. You. A formless ooze.
-( an ooze can't SOKOBAN )
+message 4.
+( two stage puzzle )
 
-####p
-#.D.#
-#.*.#
-#.o.#
-#####
+##############p
+#E.############
+#.*.*#o########
+##...#.#..#.]##
+#.*.x.A...*..##
+#E.#c.#########
+###############
 
-( discard pile )
+message 5.
+( discover the FluxFrame, then extrude the EarthFrame )
 
-#.###...#p
-.........#
-.####.....
-..#.###...
-..#..+##x.
-.#cc###...
-....###x..
-...####...
-#.........
-###......#
-
-( fetch a frame from the flux )
-##......
-##.....x
-###c..#p
-##.F....
-#&...o..
-##...F..
-
-( cross the flux : )
-( here each flux frame has access to just one vein )
-#x.....#p...d
-##.....###...
-#c#A.####....
-#&..o#.####k.
-##.....##....
-
-message shouts:
-message @deanhuff for the air frame mechanic
-
+###.###..##p
+.&#.#o..##]#
+.@.##.A..cx#
+#####...####
+...###~..###
 
 message 6.
 
-####p###
-#.oE####
-#...####
-##x#####
-##.#####
-#.c.x..#
-#..##.A#
-##.k####
-##.#####
-#...####
-#...####
-
-( t-junction passable by AIR )
-######
-..cc..
-##cc##
-#...##
-#..###
-#.EoA#
-p#####
+....#..###
+....#..#%.
+.#kk####..
+#####.....
+........].
+..........
+..###.###p
+.###Eo####
+.###.#####
+#.#.c..cx#
+#.#..##.cA
+####.##..#
+##~..#####
+#######..#
 
